@@ -80,9 +80,12 @@ public class BookController {
     }
 
     @DeleteMapping("/books/{id}")
-    public ResponseEntity<HttpStatus> deleteBook(@PathVariable("id") String id) {
+    public ResponseEntity<Book> deleteBook(@PathVariable("id") String id) {
+        Optional<Book> bookData = bookRepository.findById(id);
         try {
-            bookRepository.deleteById(id);
+            if (bookData.isPresent()) {
+                bookRepository.deleteById(id);
+            }
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
